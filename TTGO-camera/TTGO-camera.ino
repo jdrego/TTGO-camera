@@ -14,7 +14,7 @@
 
 //============ WiFi Information ========================
 #define WIFI_SSID   "GalaxyHotspot"
-#define WIFI_PASSWD "4807470998"
+#define WIFI_PASSWD ""
 //======================================================
 
 //============ PINOUT ==================================
