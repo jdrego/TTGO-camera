@@ -6,14 +6,18 @@
 #include "esp_camera.h"
 #include "esp_wifi.h"
 
+//============ Enable/Disable Sensors/Wifi =============
+#define ENABLE_SSD1306      //Enables onboard OLED screen
+//#define SOFTAP_MODE       //Enables onboard hotspot (Keep commented for Personal Wifi/Hotspot)
+//#define ENABLE_BME280     //Enables onboard sensors
+//======================================================
 
-#define ENABLE_SSD1306
-//#define SOFTAP_MODE       //The comment will be connected to the specified ssid
-//#define ENABLE_BME280
-
+//============ WiFi Information ========================
 #define WIFI_SSID   "GalaxyHotspot"
 #define WIFI_PASSWD "4807470998"
+//======================================================
 
+//============ PINOUT ==================================
 #define PWDN_GPIO_NUM 26
 #define RESET_GPIO_NUM -1
 #define XCLK_GPIO_NUM 32
@@ -34,7 +38,9 @@
 
 #define I2C_SDA 21
 #define I2C_SCL 22
+//======================================================
 
+//============ Define OLED =============================
 #ifdef ENABLE_SSD1306
 #include "SSD1306.h"
 #include "OLEDDisplayUi.h"
@@ -42,22 +48,28 @@
 SSD1306 oled(SSD1306_ADDRESS, I2C_SDA, I2C_SCL);
 OLEDDisplayUi ui(&oled);
 #endif
+//======================================================
 
+//============ Define Buttons ==========================
 #define AS312_PIN 33
 #define BUTTON_1 34
 String ip;
 EventGroupHandle_t evGroup;
 
 OneButton button1(BUTTON_1, true);
+//======================================================
 
+//============ Define onboard sensors===================
 #ifdef ENABLE_BME280
 #define BEM280_ADDRESS 0X77
 #define SEALEVELPRESSURE_HPA (1013.25)
 Adafruit_BME280 bme;
 #endif
+//======================================================
 
 void startCameraServer();
 
+//============ Button Functionality ====================
 void button1Func()
 {
     static bool en = false;
@@ -68,7 +80,9 @@ void button1Func()
     delay(200);
     xEventGroupSetBits(evGroup, 1);
 }
+//======================================================
 
+//============ Display OLED Frames =====================
 #ifdef ENABLE_SSD1306
 void drawFrame1(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x, int16_t y)
 {
@@ -110,6 +124,7 @@ void drawFrame2(OLEDDisplay *display, OLEDDisplayUiState *state, int16_t x, int1
 FrameCallback frames[] = {drawFrame1, drawFrame2};
 #define FRAMES_SIZE (sizeof(frames) / sizeof(frames[0]))
 #endif
+//======================================================
 
 void setup()
 {
